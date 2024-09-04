@@ -156,367 +156,78 @@
                     class="fas fa-th active"></i>
             </div>
         </div>
-        <div class="gallery-container all">
-            <div class="gallery-card">
-                <img src="p1.jpg" alt="">
-                <h3>Galactus Patrol Lensman</h3>
+      <div class="gallery-container all" id="gallery">
+    <div class="gallery-card" data-id="one-piece-100">
+        <img src="https://cdn.noitatnemucod.net/thumbnail/300x400/100/bcd84731a3eda4f4a306250769675065.jpg" alt="">
+        <h3>One Piece</h3>
+        <div class="hover-card">
+            <h3>Loading...</h3>
+            <span>Episode Count: Loading...</span>
+            <span>Status: Loading...</span>
+            <p>Description: Loading...</p>
+            <div class="buttons">
+                <a href="#"><i class="fas fa-play"></i> Watch Now</a>
+                <a href="#">+</a>
+            </div>
+        </div>
+    </div>
+    <!-- Add more gallery-cards here -->
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        const animes = [
+            {
+                rank: 1,
+                name: "One Piece",
+                id: "one-piece-100",
+                poster: "https://cdn.noitatnemucod.net/thumbnail/300x400/100/bcd84731a3eda4f4a306250769675065.jpg"
+            }
+            // Add more anime objects here if needed
+        ];
+
+        animes.forEach(anime => {
+            const card = `
+            <div class="gallery-card" data-id="${anime.id}">
+                <img src="${anime.poster}" alt="">
+                <h3>${anime.name}</h3>
                 <div class="hover-card">
-                    <h3>Galactus Patrol Lensman</h3>
-                    <span>Episode 9/32</span> <span>TV Series</span>
-                    <p>Kiyo and Sumire came to Kyoto from Aomori Prefecture, dreaming of becoming maiko. But after an
-                        unexpected turn of events, Kiyo starts working as the</p>
-                    <p class="stats">
-                        <span>Other names:</span> Kiyo in Kyoto: From the Maiko House
-                    </p>
-                    <p class="stats">
-                        <span>Scores:</span> 6.59
-                    </p>
-                    <p class="stats">
-                        <span>Date aired:</span> Feb 25, 2021 to ...
-                    </p>
-                    <p class="stats">
-                        <span>Status:</span> Airing
-                    </p>
-                    <p class="stats">
-                        <span>Genre:</span> Comedy, Shounen, Slice of Life
-                    </p>
+                    <h3>Loading...</h3>
+                    <span>Episode Count: Loading...</span>
+                    <span>Status: Loading...</span>
+                    <p>Description: Loading...</p>
                     <div class="buttons">
                         <a href="#"><i class="fas fa-play"></i> Watch Now</a>
                         <a href="#">+</a>
                     </div>
                 </div>
-            </div>
+            </div>`;
+            $('#gallery').append(card);
+        });
 
-            <div class="gallery-card">
-                <img src="p2.jpg" alt="">
-                <h3>Chibi Revenger</h3>
-                <div class="hover-card">
-                    <h3>Chibi Revenger</h3>
-                    <span>Episode 9/32</span> <span>TV Series</span>
-                    <p>Kiyo and Sumire came to Kyoto from Aomori Prefecture, dreaming of becoming maiko. But after an
-                        unexpected turn of events, Kiyo starts working as the</p>
-                    <p class="stats">
-                        <span>Other names:</span> Kiyo in Kyoto: From the Maiko House
-                    </p>
-                    <p class="stats">
-                        <span>Scores:</span> 6.59
-                    </p>
-                    <p class="stats">
-                        <span>Date aired:</span> Feb 25, 2021 to ...
-                    </p>
-                    <p class="stats">
-                        <span>Status:</span> Airing
-                    </p>
-                    <p class="stats">
-                        <span>Genre:</span> Comedy, Shounen, Slice of Life
-                    </p>
-                    <div class="buttons">
-                        <a href="#"><i class="fas fa-play"></i> Watch Now</a>
-                        <a href="#">+</a>
-                    </div>
-                </div>
-            </div>
+        $('.gallery-card').hover(function() {
+            const id = $(this).data('id');
+            // Fetch data from API
+            fetch(`https://aniwatch-api-net.vercel.app/anime/info?id=${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    const animeInfo = data.anime;
+                    const moreInfo = data.moreInfo;
+                    const hoverCard = $(this).find('.hover-card');
 
-            <div class="gallery-card">
-                <img src="p3.jpg" alt="">
-                <h3>To Your Eternity</h3>
-                <div class="hover-card">
-                    <h3>To Your Eternity</h3>
-                    <span>Episode 9/32</span> <span>TV Series</span>
-                    <p>Kiyo and Sumire came to Kyoto from Aomori Prefecture, dreaming of becoming maiko. But after an
-                        unexpected turn of events, Kiyo starts working as the</p>
-                    <p class="stats">
-                        <span>Other names:</span> Kiyo in Kyoto: From the Maiko House
-                    </p>
-                    <p class="stats">
-                        <span>Scores:</span> 6.59
-                    </p>
-                    <p class="stats">
-                        <span>Date aired:</span> Feb 25, 2021 to ...
-                    </p>
-                    <p class="stats">
-                        <span>Status:</span> Airing
-                    </p>
-                    <p class="stats">
-                        <span>Genre:</span> Comedy, Shounen, Slice of Life
-                    </p>
-                    <div class="buttons">
-                        <a href="#"><i class="fas fa-play"></i> Watch Now</a>
-                        <a href="#">+</a>
-                    </div>
-                </div>
-            </div>
+                    hoverCard.find('h3').text(anime.name);
+                    hoverCard.find('span').first().text(`Episodes: ${animeInfo.stats.episodes.sub}`);
+                    hoverCard.find('span').last().text(`Status: ${moreInfo.status}`);
+                    hoverCard.find('p').text(animeInfo.description);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        });
+    });
+</script>
 
-            <div class="gallery-card">
-                <img src="p4.jpg" alt="">
-                <h3>Beyblade Burst Dynamite Battle</h3>
-                <div class="hover-card">
-                    <h3>To Your Eternity</h3>
-                    <span>Episode 9/32</span> <span>TV Series</span>
-                    <p>Kiyo and Sumire came to Kyoto from Aomori Prefecture, dreaming of becoming maiko. But after an
-                        unexpected turn of events, Kiyo starts working as the</p>
-                    <p class="stats">
-                        <span>Other names:</span> Kiyo in Kyoto: From the Maiko House
-                    </p>
-                    <p class="stats">
-                        <span>Scores:</span> 6.59
-                    </p>
-                    <p class="stats">
-                        <span>Date aired:</span> Feb 25, 2021 to ...
-                    </p>
-                    <p class="stats">
-                        <span>Status:</span> Airing
-                    </p>
-                    <p class="stats">
-                        <span>Genre:</span> Comedy, Shounen, Slice of Life
-                    </p>
-                    <div class="buttons">
-                        <a href="#"><i class="fas fa-play"></i> Watch Now</a>
-                        <a href="#">+</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="gallery-card">
-                <img src="p5.jpg" alt="">
-                <h3>Mars Red (Dub)</h3>
-                <div class="hover-card">
-                    <h3>To Your Eternity</h3>
-                    <span>Episode 9/32</span> <span>TV Series</span>
-                    <p>Kiyo and Sumire came to Kyoto from Aomori Prefecture, dreaming of becoming maiko. But after an
-                        unexpected turn of events, Kiyo starts working as the</p>
-                    <p class="stats">
-                        <span>Other names:</span> Kiyo in Kyoto: From the Maiko House
-                    </p>
-                    <p class="stats">
-                        <span>Scores:</span> 6.59
-                    </p>
-                    <p class="stats">
-                        <span>Date aired:</span> Feb 25, 2021 to ...
-                    </p>
-                    <p class="stats">
-                        <span>Status:</span> Airing
-                    </p>
-                    <p class="stats">
-                        <span>Genre:</span> Comedy, Shounen, Slice of Life
-                    </p>
-                    <div class="buttons">
-                        <a href="#"><i class="fas fa-play"></i> Watch Now</a>
-                        <a href="#">+</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="gallery-card">
-                <img src="p6.png" alt="">
-                <h3>Odd Taxi</h3>
-                <div class="hover-card">
-                    <h3>To Your Eternity</h3>
-                    <span>Episode 9/32</span> <span>TV Series</span>
-                    <p>Kiyo and Sumire came to Kyoto from Aomori Prefecture, dreaming of becoming maiko. But after an
-                        unexpected turn of events, Kiyo starts working as the</p>
-                    <p class="stats">
-                        <span>Other names:</span> Kiyo in Kyoto: From the Maiko House
-                    </p>
-                    <p class="stats">
-                        <span>Scores:</span> 6.59
-                    </p>
-                    <p class="stats">
-                        <span>Date aired:</span> Feb 25, 2021 to ...
-                    </p>
-                    <p class="stats">
-                        <span>Status:</span> Airing
-                    </p>
-                    <p class="stats">
-                        <span>Genre:</span> Comedy, Shounen, Slice of Life
-                    </p>
-                    <div class="buttons">
-                        <a href="#"><i class="fas fa-play"></i> Watch Now</a>
-                        <a href="#">+</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="gallery-card">
-                <img src="p7.jpg" alt="">
-                <h3>Mars Red</h3>
-                <div class="hover-card">
-                    <h3>To Your Eternity</h3>
-                    <span>Episode 9/32</span> <span>TV Series</span>
-                    <p>Kiyo and Sumire came to Kyoto from Aomori Prefecture, dreaming of becoming maiko. But after an
-                        unexpected turn of events, Kiyo starts working as the</p>
-                    <p class="stats">
-                        <span>Other names:</span> Kiyo in Kyoto: From the Maiko House
-                    </p>
-                    <p class="stats">
-                        <span>Scores:</span> 6.59
-                    </p>
-                    <p class="stats">
-                        <span>Date aired:</span> Feb 25, 2021 to ...
-                    </p>
-                    <p class="stats">
-                        <span>Status:</span> Airing
-                    </p>
-                    <p class="stats">
-                        <span>Genre:</span> Comedy, Shounen, Slice of Life
-                    </p>
-                    <div class="buttons">
-                        <a href="#"><i class="fas fa-play"></i> Watch Now</a>
-                        <a href="#">+</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="gallery-card">
-                <img src="p8.jpg" alt="">
-                <h3>Fruite Basket: The Final</h3>
-                <div class="hover-card">
-                    <h3>To Your Eternity</h3>
-                    <span>Episode 9/32</span> <span>TV Series</span>
-                    <p>Kiyo and Sumire came to Kyoto from Aomori Prefecture, dreaming of becoming maiko. But after an
-                        unexpected turn of events, Kiyo starts working as the</p>
-                    <p class="stats">
-                        <span>Other names:</span> Kiyo in Kyoto: From the Maiko House
-                    </p>
-                    <p class="stats">
-                        <span>Scores:</span> 6.59
-                    </p>
-                    <p class="stats">
-                        <span>Date aired:</span> Feb 25, 2021 to ...
-                    </p>
-                    <p class="stats">
-                        <span>Status:</span> Airing
-                    </p>
-                    <p class="stats">
-                        <span>Genre:</span> Comedy, Shounen, Slice of Life
-                    </p>
-                    <div class="buttons">
-                        <a href="#"><i class="fas fa-play"></i> Watch Now</a>
-                        <a href="#">+</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="gallery-card">
-                <img src="p9.jpg" alt="">
-                <h3>GLOMMY The Naughty Grizzy</h3>
-                <div class="hover-card">
-                    <h3>To Your Eternity</h3>
-                    <span>Episode 9/32</span> <span>TV Series</span>
-                    <p>Kiyo and Sumire came to Kyoto from Aomori Prefecture, dreaming of becoming maiko. But after an
-                        unexpected turn of events, Kiyo starts working as the</p>
-                    <p class="stats">
-                        <span>Other names:</span> Kiyo in Kyoto: From the Maiko House
-                    </p>
-                    <p class="stats">
-                        <span>Scores:</span> 6.59
-                    </p>
-                    <p class="stats">
-                        <span>Date aired:</span> Feb 25, 2021 to ...
-                    </p>
-                    <p class="stats">
-                        <span>Status:</span> Airing
-                    </p>
-                    <p class="stats">
-                        <span>Genre:</span> Comedy, Shounen, Slice of Life
-                    </p>
-                    <div class="buttons">
-                        <a href="#"><i class="fas fa-play"></i> Watch Now</a>
-                        <a href="#">+</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="gallery-card">
-                <img src="p10.jpg" alt="">
-                <h3>Nomad: Megalo Box 2</h3>
-                <div class="hover-card">
-                    <h3>To Your Eternity</h3>
-                    <span>Episode 9/32</span> <span>TV Series</span>
-                    <p>Kiyo and Sumire came to Kyoto from Aomori Prefecture, dreaming of becoming maiko. But after an
-                        unexpected turn of events, Kiyo starts working as the</p>
-                    <p class="stats">
-                        <span>Other names:</span> Kiyo in Kyoto: From the Maiko House
-                    </p>
-                    <p class="stats">
-                        <span>Scores:</span> 6.59
-                    </p>
-                    <p class="stats">
-                        <span>Date aired:</span> Feb 25, 2021 to ...
-                    </p>
-                    <p class="stats">
-                        <span>Status:</span> Airing
-                    </p>
-                    <p class="stats">
-                        <span>Genre:</span> Comedy, Shounen, Slice of Life
-                    </p>
-                    <div class="buttons">
-                        <a href="#"><i class="fas fa-play"></i> Watch Now</a>
-                        <a href="#">+</a>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="gallery-card">
-                <img src="p11.jpg" alt="">
-                <h3>Let's Make a Mug Too</h3>
-                <div class="hover-card">
-                    <h3>To Your Eternity</h3>
-                    <span>Episode 9/32</span> <span>TV Series</span>
-                    <p>Kiyo and Sumire came to Kyoto from Aomori Prefecture, dreaming of becoming maiko. But after an
-                        unexpected turn of events, Kiyo starts working as the</p>
-                    <p class="stats">
-                        <span>Other names:</span> Kiyo in Kyoto: From the Maiko House
-                    </p>
-                    <p class="stats">
-                        <span>Scores:</span> 6.59
-                    </p>
-                    <p class="stats">
-                        <span>Date aired:</span> Feb 25, 2021 to ...
-                    </p>
-                    <p class="stats">
-                        <span>Status:</span> Airing
-                    </p>
-                    <p class="stats">
-                        <span>Genre:</span> Comedy, Shounen, Slice of Life
-                    </p>
-                    <div class="buttons">
-                        <a href="#"><i class="fas fa-play"></i> Watch Now</a>
-                        <a href="#">+</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="gallery-card">
-                <img src="p12.jpg" alt="">
-                <h3>To Love Ru Darkness</h3>
-                <div class="hover-card">
-                    <h3>To Your Eternity</h3>
-                    <span>Episode 9/32</span> <span>TV Series</span>
-                    <p>Kiyo and Sumire came to Kyoto from Aomori Prefecture, dreaming of becoming maiko. But after an
-                        unexpected turn of events, Kiyo starts working as the</p>
-                    <p class="stats">
-                        <span>Other names:</span> Kiyo in Kyoto: From the Maiko House
-                    </p>
-                    <p class="stats">
-                        <span>Scores:</span> 6.59
-                    </p>
-                    <p class="stats">
-                        <span>Date aired:</span> Feb 25, 2021 to ...
-                    </p>
-                    <p class="stats">
-                        <span>Status:</span> Airing
-                    </p>
-                    <p class="stats">
-                        <span>Genre:</span> Comedy, Shounen, Slice of Life
-                    </p>
-                    <div class="buttons">
-                        <a href="#"><i class="fas fa-play"></i> Watch Now</a>
-                        <a href="#">+</a>
-                    </div>
-                </div>
-            </div>
 
         </div>
         <div class="gallery-container subbed">
