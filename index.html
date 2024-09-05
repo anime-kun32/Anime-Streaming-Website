@@ -534,47 +534,54 @@
 
 
     <!--------- Update Section --------->
-    <section class="update">
+    <section class="update" id="anime-schedule">
         <div class="left">
             <div class="details">
                 <h3>ESTIMATED <br> SCHEDULE</h3>
-                <p>5/27/2021 3:25:09 AM - GMT</p>
+                <p id="datetime"></p>
             </div>
             <div class="days">
-                <div class="prev" id="now">YESTERDAY</div>
                 <div class="now active">TODAY</div>
-                <div class="next">TOMORROW</div>
             </div>
-            <div class="sub-details now ">
-                <span>03:00</span><a href="#"> Gorilla Singular Point </a><span>- EP 10</span>
-            </div>
-            <div class="sub-details">
-                <span>08:00</span><a href="#"> So I'm a Spider, So What? </a><span>- EP 9</span>
-            </div>
-            <div class="sub-details">
-                <span>08:55</span><a href="#"> SSSS.Dynazenon </a><span>- EP 18</span>
-            </div>
-            <div class="sub-details">
-                <span>08:55</span><a href="#"> D4DJ Petit Mix </a><span>- EP 6</span>
-            </div>
-            <div class="sub-details">
-                <span>14:00</span><a href="#"> D4DJ Petit Mix </a><span>- EP 7</span>
-            </div>
-            <div class="sub-details">
-                <span>14:30</span><a href="#"> D4DJ Petit Mix </a><span>- EP 8</span>
-            </div>
-            <div class="sub-details">
-                <span>15:00</span><a href="#"> D4DJ Petit Mix </a><span>- EP 9</span>
-            </div>
-            <div class="sub-details">
-                <span>15:00</span><a href="#"> Black Arrow </a><span>- EP 10</span>
-            </div>
-            <div class="sub-details">
-                <span>15:00</span><a href="#"> Burning Kabbadi </a><span>- EP 10</span>
-            </div>
-            <div class="sub-details">
-                <span>15:00</span><a href="#"> Those Snow White Notes </a><span>- EP 10</span>
-            </div>
+            <div id="anime-list"></div>
+        </div>
+   
+
+    <script>
+        const apiUrl = 'https://aniwatch-api-net.vercel.app/anime/schedule'; // Replace with actual URL
+
+        async function fetchAnimeSchedule() {
+            const today = new Date();
+            const date = today.toISOString().split('T')[0]; // yyyy-mm-dd format
+            const response = await fetch(`${apiUrl}?date=${date}`);
+            const data = await response.json();
+            return data.scheduledAnimes;
+        }
+
+        function convertToUserTimezone(originalTime, originalOffset) {
+            const offset = new Date().getTimezoneOffset() * 60000; // convert to milliseconds
+            const convertedTime = new Date(new Date(originalTime).getTime() + originalOffset * 3600000 - offset);
+            return convertedTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        async function displayAnimeSchedule() {
+            const scheduledAnimes = await fetchAnimeSchedule();
+            const now = new Date();
+            const gmtOffset = 3; // GMT offset of the original time (for GMT+3)
+
+            document.getElementById('datetime').innerText = now.toISOString(); // Display current time in ISO format
+
+            scheduledAnimes.forEach(anime => {
+                const convertedTime = convertToUserTimezone(anime.time, gmtOffset);
+                const animeDiv = document.createElement('div');
+                animeDiv.className = 'sub-details';
+                animeDiv.innerHTML = `<span>${convertedTime}</span> <a href="#">${anime.name}</a><span>- ${anime.jname}</span>`;
+                document.getElementById('anime-list').appendChild(animeDiv);
+            });
+        }
+
+        displayAnimeSchedule();
+    </script>
 
         </div>
 
