@@ -254,8 +254,8 @@
 
 
         </div>
-        <div class="gallery-container subbed">
-          <script>
+        <div class="gallery-container subbed" id="latest">
+         <script>
     $(document).ready(function() {
         // Function to create gallery cards from anime data
         function createGalleryCard(anime) {
@@ -274,7 +274,7 @@
                     </div>
                 </div>
             </div>`;
-            $('#gallery').append(card);
+            $('#latest').append(card); // Changed from #gallery to #latest
         }
 
         // Fetch anime data from API
@@ -329,6 +329,7 @@
             });
     });
 </script>
+
 
 
         <div class="gallery-container dubbed">
