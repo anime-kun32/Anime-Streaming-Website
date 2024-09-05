@@ -175,80 +175,81 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function() {
-    // Function to create gallery cards from anime data
-    function createGalleryCard(anime) {
-        const card = `
-        <div class="gallery-card" data-id="${anime.id}">
-            <img src="${anime.poster}" alt="">
-            <h3>${anime.name}</h3>
-            <div class="hover-card">
-                <h3>Loading...</h3>
-                <span>Episode Count: Loading...</span>
-                <span>Status: Loading...</span>
-                <p>Description: Loading...</p>
-                <div class="buttons">
-                    <a href="#"><i class="fas fa-play"></i> Watch Now</a>
-                    <a href="#">+</a>
-                </div>
-            </div>
-        </div>`;
-        $('#gallery').append(card);
-    }
 
-    // Fetch anime data from API
-    fetch('https://aniwatch-api-net.vercel.app/anime/home')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+    <script>
+        $(document).ready(function() {
+            // Function to create gallery cards from anime data
+            function createGalleryCard(anime) {
+                const card = `
+                <div class="gallery-card" data-id="${anime.id}">
+                    <img src="${anime.poster}" alt="">
+                    <h3>${anime.name}</h3>
+                    <div class="hover-card">
+                        <h3>Loading...</h3>
+                        <span>Episode Count: Loading...</span>
+                        <span>Status: Loading...</span>
+                        <p>Description: Loading...</p>
+                        <div class="buttons">
+                            <a href="#"><i class="fas fa-play"></i> Watch Now</a>
+    <a href="#">+</a>
+                        </div>
+                    </div>
+                </div>`;
+                $('#gallery').append(card);
             }
-            return response.json();
-        })
-        .then(data => {
-            // Assuming that data contains an array called 'animes'
-            data.animes.forEach(anime => {
-                createGalleryCard(anime);
-            });
 
-            // Hover event to fetch additional info
-            $('.gallery-card').hover(function() {
-                const id = $(this).data('id');
-                const hoverCard = $(this).find('.hover-card');
-
-                // Fetch additional data for hover display
-                fetch(`https://aniwatch-api-net.vercel.app/anime/info?id=${id}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        const animeInfo = data.anime;
-                        const moreInfo = data.moreInfo;
-
-                        hoverCard.find('h3').text(animeInfo.info.name);
-                        hoverCard.find('span').first().text(`Episodes: ${animeInfo.info.stats.episodes.sub}`);
-                        hoverCard.find('span').last().text(`Status: ${moreInfo?.status || 'N/A'}`); // Optional chaining
-
-                        const description = animeInfo.info.description.split(' ').slice(0, 10).join(' ') + '...';
-                        hoverCard.find('p').text(`Description: ${description}`);
-                    })
-                    .catch(error => {
-                        console.error('Error fetching data:', error);
-                        hoverCard.find('h3').text('Error loading info');
-                        hoverCard.find('span').first().text('Episodes: N/A');
-                        hoverCard.find('span').last().text('Status: N/A');
-                        hoverCard.find('p').text('Description: Unable to fetch.');
+            // Fetch anime data from API
+            fetch('https://aniwatch-api-net.vercel.app/anime/home')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Assuming that data contains an array called 'animes'
+                    data.trendingAnimes.forEach(anime => {
+                        createGalleryCard(anime);
                     });
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching anime list:', error);
+
+                    // Hover event to fetch additional info
+                    $('.gallery-card').hover(function() {
+                        const id = $(this).data('id');
+                        const hoverCard = $(this).find('.hover-card');
+
+                        // Fetch additional data for hover display
+                        fetch(`https://aniwatch-api-net.vercel.app/anime/info?id=${id}`)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                const animeInfo = data.anime;
+                                const moreInfo = data.moreInfo;
+
+                                hoverCard.find('h3').text(animeInfo.info.name);
+                                hoverCard.find('span').first().text(`Episodes: ${animeInfo.info.stats.episodes.sub}`);
+                                hoverCard.find('span').last().text(`Status: ${moreInfo?.status || 'N/A'}`); // Optional chaining
+
+                                const description = animeInfo.info.description.split(' ').slice(0, 10).join(' ') + '...';
+                                hoverCard.find('p').text(`Description: ${description}`);
+                            })
+                            .catch(error => {
+                                console.error('Error fetching data:', error);
+                                hoverCard.find('h3').text('Error loading info');
+                                hoverCard.find('span').first().text('Episodes: N/A');
+                                hoverCard.find('span').last().text('Status: N/A');
+                                hoverCard.find('p').text('Description: Unable to fetch.');
+                            });
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching anime list:', error);
+                });
         });
-});
-</script>
+    </script>
 
 
 
