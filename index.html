@@ -654,86 +654,59 @@
             </div>
 
         </div>
-
-        <div class="right">
-            <div class="details">
-                <h3>RECENTLY <br> ADDED </h3>
-                <p style="border-bottom: 1px solid #6d6d6d; cursor: pointer;">View all</p>
-            </div>
-            
-            <div class="mid-container">
-                <div class="img-container">
-                    <div class="trending-img">
-                        <img src="r4.jpg" alt="">
-                    </div>
-                </div>
-                <div class="mid-detail">
-                    <h1>Babylon (Dub)</h1>
-                    <p>Ep 12/12 &nbsp;&nbsp; <i class="fas fa-circle"></i> &nbsp;&nbsp; 28 min/ep</p>
-                </div>
-            </div>
-            
-            <div class="mid-container">
-                <div class="img-container">
-                    <div class="trending-img">
-                        <img src="r3.jpg" alt="">
-                    </div>
-                </div>
-                <div class="mid-detail">
-                    <h1>Higurashi: When They Cry – Gou (Dub) </h1>
-                    <p>Ep 21/24 &nbsp;&nbsp; <i class="fas fa-circle"></i> &nbsp;&nbsp; 30 min/ep</p>
-                </div>
-            </div>
-            
-            <div class="mid-container">
-                <div class="img-container">
-                    <div class="trending-img">
-                        <img src="r2.jpg" alt="">
-                    </div>
-                </div>
-                <div class="mid-detail">
-                    <h1>Fairy Ranmaru: Anata no Kokoro Otasuke Shimasu</h1>
-                    <p>Ep 5/12 &nbsp;&nbsp; <i class="fas fa-circle"></i> &nbsp;&nbsp; 24 min/ep</p>
-                </div>
-            </div>
-            
-            <div class="mid-container">
-                <div class="img-container">
-                    <div class="trending-img">
-                        <img src="r1.jpg" alt="">
-                    </div>
-                </div>
-                <div class="mid-detail">
-                    <h1>Zombie Land Saga Revenge</h1>
-                    <p>Ep 8/12 &nbsp;&nbsp; <i class="fas fa-circle"></i> &nbsp;&nbsp; 124min</p>
-                </div>
-            </div>
-            
-            <div class="mid-container">
-                <div class="img-container">
-                    <div class="trending-img">
-                        <img src="r5.jpg" alt="">
-                    </div>
-                </div>
-                <div class="mid-detail">
-                    <h1>SD GUNDAM WORLD HEROES</h1>
-                    <p>Ep 8/8 &nbsp;&nbsp; <i class="fas fa-circle"></i> &nbsp;&nbsp; 14 min/ep</p>
-                </div>
-            </div>
-            
-            <div class="mid-container">
-                <div class="img-container">
-                    <div class="trending-img">
-                        <img src="r6.jpg" alt="">
-                    </div>
-                </div>
-                <div class="mid-detail">
-                    <h1>Princess Principal Crown Handler</h1>
-                    <p>Ep 12/12 &nbsp;&nbsp; <i class="fas fa-circle"></i> &nbsp;&nbsp; 44 min/ep</p>
-                </div>
-            </div>
-            
+    <div class="right">
+        <div class="details">
+            <h3>RECENTLY <br> ADDED </h3>
+            <p style="border-bottom: 1px solid #6d6d6d; cursor: pointer;">View all</p>
         </div>
+        
+        <!-- Container for dynamically generated anime items -->
+        <div id="anime-container"></div>
+    </div>
+
+    <script>
+        // JavaScript to fetch anime data and display it
+        async function fetchLatestAnime() {
+            const apiUrl = 'https://aniwatch-api-net.vercel.app/anime/home'; // Replace with your API URL
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                const animeContainer = document.getElementById('anime-container');
+
+                // Clear previous content if any
+                animeContainer.innerHTML = '';
+
+                // Map through the latestEpisodeAnimes and generate HTML
+                data.latestEpisodeAnimes.forEach(anime => {
+                    const { id, name, poster, duration, episodes } = anime;
+
+                    const animeItem = `
+                        <div class="mid-container">
+                            <div class="img-container">
+                                <div class="trending-img">
+                                    <img src="${poster}" alt="${name}">
+                                </div>
+                            </div>
+                            <div class="mid-detail">
+                                <h1>${name}</h1>
+                                <p>Ep ${episodes.dub !== null ? episodes.dub : "N/A"} &nbsp;&nbsp; <i class="fas fa-circle"></i> &nbsp;&nbsp; ${duration}</p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    animeContainer.insertAdjacentHTML('beforeend', animeItem);
+                });
+            } catch (error) {
+                console.error("Error fetching anime data:", error);
+            }
+        }
+
+        // Call the function to fetch the latest anime when the document is loaded
+        document.addEventListener('DOMContentLoaded', fetchLatestAnime);
+    </script>
+ 
     </section>
     <!--------- Update Section End --------->
 
