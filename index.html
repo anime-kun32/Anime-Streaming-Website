@@ -575,7 +575,7 @@
                 const convertedTime = convertToUserTimezone(anime.time, gmtOffset);
                 const animeDiv = document.createElement('div');
                 animeDiv.className = 'sub-details';
-                animeDiv.innerHTML = `<span>${convertedTime}</span> <a href="#">${anime.name}</a><span>- ${anime.jname}</span>`;
+                animeDiv.innerHTML = `<span>${convertedTime}</span> <a href="#">${anime.name}</a>`;
                 document.getElementById('anime-list').appendChild(animeDiv);
             });
         }
