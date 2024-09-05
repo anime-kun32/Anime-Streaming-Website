@@ -332,14 +332,18 @@
 
 
 
-        <div class="gallery-container dubbed" id="upcoming">
-         <script>
+        <div class="gallery-container dubbed" id="upcoming"></div>
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
         $(document).ready(function() {
             // Function to create gallery cards from anime data
             function createGalleryCard(anime) {
                 const card = `
                 <div class="gallery-card" data-id="${anime.id}">
-                    <img src="${anime.poster}" alt="">
+                    <img src="${anime.poster}" alt="${anime.name}">
                     <h3>${anime.name}</h3>
                     <div class="hover-card">
                         <h3>Loading...</h3>
